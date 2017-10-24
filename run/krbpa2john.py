@@ -132,6 +132,7 @@ def process_file(f):
                 for spnp in spnps:
                     out.append(spnp.attrib["show"])
                 spn = "/".join(out)
+            salt = "XXX"  # fill me manually for now
             # locate the hash
             rs = msg.xpath('.//field[@name="kerberos.enc_part_element"]')
             if not rs:
@@ -155,7 +156,8 @@ def process_file(f):
                         v = v[0]
                     data = v.attrib["value"]
                     if etype != "23":
-                        sys.stderr.write("Currently unsupported etype %s found!\n" % etype)
+                        # sys.stderr.write("Currently unsupported etype %s found!\n" % etype)
+                        sys.stdout.write("%s:$krb5tgs$%s$%s$%s$%s\n" % (spn, etype, salt, data[0:-24], data[-24:]))
                     else:
                         sys.stdout.write("%s:$krb5tgs$%s$%s$%s\n" % (spn, etype, data[:32], data[32:]))
 
